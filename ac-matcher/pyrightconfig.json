@@ -1,6 +1,0 @@
-{
-  "include": ["."],
-  "typeCheckingMode": "basic",
-  "reportMissingImports": true,
-  "pythonVersion": "3.11"
-}
