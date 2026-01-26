@@ -202,6 +202,27 @@ def job_detail(request: Request, job_id: int):
     )
 
 
+
+
+# ===== 案主：成交/關閉案件 =====
+@app.post("/jobs/{job_id}/close")
+def close_job(request: Request, job_id: int):
+    user = current_user(request)
+    if (not user) or user.role != "owner":
+        return RedirectResponse("/login", status_code=303)
+
+    with get_session() as s:
+        job = s.get(Job, job_id)
+        if (not job) or job.owner_id != user.id:
+            return RedirectResponse("/jobs", status_code=303)
+
+        job.status = "closed"
+        s.add(job)
+        s.commit()
+
+    return RedirectResponse(f"/jobs/{job_id}", status_code=303)
+
+
 # ===== 師傅：提案 =====
 @app.post("/jobs/{job_id}/propose")
 def propose(
