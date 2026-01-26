@@ -1,16 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>案主面板</h2>
-<a class="btn" href="/jobs/post">+ 發新案件</a>
+  <section class="hero">
+    <div class="badge violet">案主面板</div>
+    <h1 class="h1" style="margin-top:10px;">快速管理你的案件</h1>
+    <p class="p">發案後，回到這裡查看師傅提案。</p>
+    <div style="height:12px"></div>
+    <div class="actions">
+      <a class="btn primary" href="/jobs/post">+ 發新案件</a>
+      <a class="btn" href="/jobs">看公開案件</a>
+    </div>
+  </section>
 
-<h3>我的案件</h3>
-{% for j in my_jobs %}
-<div class="item">
-    <b>#{{j.id}} {{j.service_type}}</b>
-    <span class="muted">｜{{j.city}} {{j.district}}｜狀態：{{j.status}}</span>
-    <a class="btn small" href="/jobs/{{j.id}}">查看提案</a>
-</div>
-{% else %}
-<p class="muted">你還沒有案件</p>
-{% endfor %}
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="h2">我的案件</div>
+        <div class="small">點進去查看提案</div>
+      </div>
+    </div>
+    <div class="section-body">
+      {% if my_jobs %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>案件</th>
+              <th>地區</th>
+              <th>狀態</th>
+              <th>建立</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for j in my_jobs %}
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="badge violet">#{{ j.id }}</span>
+                    <div>
+                      <div style="font-weight:900;">{{ j.service_type }} · {{ j.units }} 台</div>
+                      <div class="small">{{ j.ac_type or "冷氣類型未填" }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="muted">{{ j.city }} {{ j.district }}</td>
+                <td>
+                  {% if j.status == "open" %}
+                    <span class="badge green">開放中</span>
+                  {% else %}
+                    <span class="badge amber">已關閉</span>
+                  {% endif %}
+                </td>
+                <td class="muted">{{ j.created_at }}</td>
+                <td><a class="btn small" href="/jobs/{{ j.id }}">查看</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="card soft">
+          <div class="h3">你還沒有案件</div>
+          <p class="p">先建立一筆測試案件，確認流程與介面。</p>
+          <div style="height:10px"></div>
+          <a class="btn primary" href="/jobs/post">建立第一筆案件</a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
 {% endblock %}

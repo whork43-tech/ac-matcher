@@ -1,19 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>冷氣清洗 / 維修 / 安裝 媒合平台（MVP）</h1>
-<p class="muted">先把「能發案、師傅能提案、案主能看提案」跑起來。</p>
+  <section class="hero">
+    <div class="grid">
+      <div class="col-7">
+        <div class="badge violet">快速媒合</div>
+        <h1 class="h1">3 分鐘發案，當天收到報價</h1>
+        <p class="p">冷氣清洗 / 維修 / 安裝 / 移機，填一次需求，讓附近師傅直接提案。</p>
+        <div style="height:12px"></div>
+        <div class="actions">
+          <a class="btn primary" href="/jobs/post">我要發案</a>
+          <a class="btn" href="/jobs">先看有哪些案件</a>
+        </div>
+        <div style="height:14px"></div>
+        <div class="grid">
+          <div class="col-4 card soft kpi">
+            <div class="value">更快</div>
+            <div class="label">不用到處詢問比價</div>
+          </div>
+          <div class="col-4 card soft kpi">
+            <div class="value">更準</div>
+            <div class="label">冷氣專用欄位更好報價</div>
+          </div>
+          <div class="col-4 card soft kpi">
+            <div class="value">更省</div>
+            <div class="label">清楚掌握急件/台數/時間</div>
+          </div>
+        </div>
+      </div>
 
-<div class="cards">
-    <div class="card">
-        <h3>案主</h3>
-        <p>3 分鐘發案，讓師傅來報價</p>
-        <a class="btn" href="/jobs/post">我要發案</a>
+      <div class="col-5">
+        <div class="card">
+          <div class="h2">我是師傅 / 工作室</div>
+          <p class="p">看公開案件，快速提案、安排到場時間。</p>
+          <div style="height:10px"></div>
+          <div class="actions">
+            <a class="btn green" href="/jobs">去接案</a>
+            {% if not user %}
+              <a class="btn" href="/register">註冊師傅帳號</a>
+            {% endif %}
+          </div>
+          <div style="height:14px"></div>
+          <div class="badge amber">MVP 提醒：目前提案只讓案主本人看到</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="card">
-        <h3>師傅</h3>
-        <p>看公開案件，快速提案報價</p>
-        <a class="btn" href="/jobs">去看案件</a>
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="h2">你可以做什麼？</div>
+        <div class="small">先把核心流程做漂亮：發案 → 提案 → 案主查看</div>
+      </div>
+      <a class="btn small" href="/jobs">查看案件列表</a>
     </div>
-</div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="col-4 card">
+          <div class="badge violet">案主</div>
+          <div class="h3">一鍵發案</div>
+          <p class="p">填地區、台數、需求與時間，讓師傅直接報價。</p>
+        </div>
+        <div class="col-4 card">
+          <div class="badge green">師傅</div>
+          <div class="h3">快速提案</div>
+          <p class="p">輸入價格、到場時間、保固與備註，立即送出。</p>
+        </div>
+        <div class="col-4 card">
+          <div class="badge amber">可擴充</div>
+          <div class="h3">下一步升級</div>
+          <p class="p">照片上傳、成交/關閉、通知、收費、評價系統。</p>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

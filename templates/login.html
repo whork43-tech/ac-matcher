@@ -1,14 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>登入</h2>
-<form method="post">
-    <label>Email</label>
-    <input name="email" type="email" required />
-    <label>密碼</label>
-    <input name="password" type="password" required />
-    <button class="btn" type="submit">登入</button>
-</form>
-{% if "bad_login" in (request.url.query or "") %}
-<p class="error">帳號或密碼錯誤</p>
-{% endif %}
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="h2">登入</div>
+        <div class="small">用 Email 登入，開始發案或接案</div>
+      </div>
+      <a class="btn small" href="/register">沒有帳號？註冊</a>
+    </div>
+    <div class="section-body">
+      <form class="form" method="post">
+        <div class="field">
+          <div class="label">Email</div>
+          <input class="input" name="email" type="email" required placeholder="name@example.com" />
+        </div>
+        <div class="field">
+          <div class="label">密碼</div>
+          <input class="input" name="password" type="password" required placeholder="••••••••" />
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit">登入</button>
+          <a class="btn" href="/">回首頁</a>
+        </div>
+        {% if "bad_login" in (request.url.query or "") %}
+          <div class="alert">帳號或密碼錯誤</div>
+        {% endif %}
+      </form>
+    </div>
+  </section>
 {% endblock %}

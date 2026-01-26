@@ -1,31 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>註冊</h2>
-<form method="post">
-    <label>身分</label>
-    <select name="role" required>
-        <option value="owner">案主（我要找師傅）</option>
-        <option value="provider">師傅（我要接案）</option>
-    </select>
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="h2">註冊</div>
+        <div class="small">選擇身分後註冊：案主發案 / 師傅接案</div>
+      </div>
+      <a class="btn small" href="/login">已有帳號？登入</a>
+    </div>
+    <div class="section-body">
+      <form class="form" method="post">
+        <div class="grid">
+          <div class="col-6 field">
+            <div class="label">身分</div>
+            <select class="select" name="role" required>
+              <option value="owner">案主（我要找師傅）</option>
+              <option value="provider">師傅（我要接案）</option>
+            </select>
+            <div class="help">案主可以發案並查看收到的提案</div>
+          </div>
 
-    <label>姓名/店名</label>
-    <input name="name" required />
+          <div class="col-6 field">
+            <div class="label">城市（選填）</div>
+            <input class="input" name="city" placeholder="例：高雄市" />
+          </div>
 
-    <label>電話</label>
-    <input name="phone" required />
+          <div class="col-6 field">
+            <div class="label">姓名 / 店名</div>
+            <input class="input" name="name" required placeholder="例：鑫宇冷氣空調 / 王先生" />
+          </div>
 
-    <label>城市（選填）</label>
-    <input name="city" />
+          <div class="col-6 field">
+            <div class="label">電話</div>
+            <input class="input" name="phone" required placeholder="例：09xx-xxx-xxx" />
+          </div>
 
-    <label>Email</label>
-    <input name="email" type="email" required />
+          <div class="col-6 field">
+            <div class="label">Email</div>
+            <input class="input" name="email" type="email" required placeholder="name@example.com" />
+          </div>
 
-    <label>密碼</label>
-    <input name="password" type="password" required />
+          <div class="col-6 field">
+            <div class="label">密碼</div>
+            <input class="input" name="password" type="password" required placeholder="至少 8 碼（建議）" />
+          </div>
 
-    <button class="btn" type="submit">註冊並登入</button>
-</form>
-{% if "email_exists" in (request.url.query or "") %}
-<p class="error">這個 Email 已被註冊。</p>
-{% endif %}
+          <div class="col-12 actions">
+            <button class="btn primary" type="submit">註冊並登入</button>
+            <a class="btn" href="/">回首頁</a>
+          </div>
+        </div>
+        {% if "email_exists" in (request.url.query or "") %}
+          <div class="alert">這個 Email 已被註冊。</div>
+        {% endif %}
+      </form>
+    </div>
+  </section>
 {% endblock %}

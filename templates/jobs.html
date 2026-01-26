@@ -1,16 +1,69 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>公開案件列表</h2>
-{% for j in jobs %}
-<div class="item">
-    <div>
-        <b>#{{j.id}} {{j.service_type}}</b>
-        <span class="muted">｜{{j.city}} {{j.district}}｜{{j.units}}台｜{{ "急件" if j.urgent else "一般" }}</span>
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="h2">公開案件列表</div>
+        <div class="small">目前只顯示「開放中」的案件</div>
+      </div>
+      <div class="actions">
+        {% if user and user.role == "owner" %}
+          <a class="btn small primary" href="/jobs/post">+ 發案</a>
+        {% endif %}
+        <a class="btn small" href="/">回首頁</a>
+      </div>
     </div>
-    <div class="muted">建立：{{j.created_at}}</div>
-    <a class="btn small" href="/jobs/{{j.id}}">查看</a>
-</div>
-{% else %}
-<p class="muted">目前沒有案件</p>
-{% endfor %}
+
+    <div class="section-body">
+      {% if jobs %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>案件</th>
+              <th>地區</th>
+              <th>需求</th>
+              <th>建立</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for j in jobs %}
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="badge violet">#{{ j.id }}</span>
+                    <div>
+                      <div style="font-weight:900;">{{ j.service_type }}</div>
+                      <div class="small">{{ j.ac_type or "冷氣類型未填" }} · {{ j.units }} 台</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="muted">{{ j.city }} {{ j.district }}</td>
+                <td>
+                  {% if j.urgent %}
+                    <span class="badge red">急件</span>
+                  {% else %}
+                    <span class="badge green">一般</span>
+                  {% endif %}
+                </td>
+                <td class="muted">{{ j.created_at }}</td>
+                <td><a class="btn small" href="/jobs/{{ j.id }}">查看</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="card soft">
+          <div class="h3">目前沒有案件</div>
+          <p class="p">你可以先建立一筆測試案件，確認流程。</p>
+          <div style="height:10px"></div>
+          {% if user and user.role == "owner" %}
+            <a class="btn primary" href="/jobs/post">建立第一筆案件</a>
+          {% else %}
+            <a class="btn" href="/register">註冊後發案</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
 {% endblock %}
