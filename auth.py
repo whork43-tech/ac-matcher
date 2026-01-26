@@ -1,4 +1,3 @@
-# auth.py
 from __future__ import annotations
 
 import os
@@ -9,9 +8,10 @@ from fastapi.responses import Response
 from itsdangerous import BadSignature, URLSafeSerializer
 from passlib.context import CryptContext
 
-pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# ✅ 改用純 Python 的 pbkdf2_sha256（避免 Python 3.13 上 bcrypt wheel/相依問題造成 500）
+pwd = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
-# ✅ 建議你改成環境變數：APP_SECRET="一串很長很亂的字"
+# ✅ 建議你在 Render 的 Environment 設定：APP_SECRET="一串很長很亂的字"
 SECRET = os.getenv("APP_SECRET", "change-me-to-a-long-random-secret")
 serializer = URLSafeSerializer(SECRET, salt="session")
 
@@ -23,6 +23,8 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(password: str, password_hash: str) -> bool:
+    if not password_hash:
+        return False
     return pwd.verify(password, password_hash)
 
 
