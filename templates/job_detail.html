@@ -7,10 +7,15 @@
         <div class="small">{{ job.city }} {{ job.district }} · {{ job.units }} 台 · {{ job.created_at }}</div>
       </div>
       <div class="actions">
-        {% if job.urgent %}
-          <span class="badge red">急件</span>
+        {% if job.status == "open" %}
+          {% if job.urgent %}
+            <span class="badge red">急件</span>
+          {% else %}
+            <span class="badge green">一般</span>
+          {% endif %}
+          <span class="badge green">開放中</span>
         {% else %}
-          <span class="badge green">一般</span>
+          <span class="badge amber">已成交/關閉</span>
         {% endif %}
         <a class="btn small" href="/jobs">回列表</a>
       </div>
@@ -25,8 +30,8 @@
               <span class="badge amber">{{ job.ac_type or "冷氣類型未填" }}</span>
               <span class="badge green">{{ job.units }} 台</span>
             </div>
-            <div style="height:10px"></div>
 
+            <div style="height:10px"></div>
             <div class="grid">
               <div class="col-6 card soft">
                 <div class="h3">可約時間</div>
@@ -47,76 +52,107 @@
             </div>
           </div>
 
-          {% if proposals and user and user.role == "owner" %}
+          {% if user and user.role == "owner" and job.owner_id == user.id %}
             <div style="height:14px"></div>
             <div class="card">
-              <div class="h2">收到的提案</div>
-              <div class="small">只有案主本人看得到（MVP）</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <div>
+                  <div class="h2">收到的提案</div>
+                  <div class="small">只有案主本人看得到（MVP）</div>
+                </div>
+
+                {% if job.status == "open" %}
+                  <form method="post" action="/jobs/{{ job.id }}/close" style="margin:0;">
+                    <button class="btn primary" type="submit">成交並關閉案件</button>
+                  </form>
+                {% else %}
+                  <span class="badge amber">此案件已關閉</span>
+                {% endif %}
+              </div>
+
               <div style="height:10px"></div>
 
-              {% for p in proposals %}
-                <div class="card soft" style="margin-bottom:10px;">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-                    <div style="font-weight:900;font-size:18px;">NT$ {{ p.price }}</div>
-                    <div class="small">{{ p.created_at }}</div>
+              {% if proposals %}
+                {% for p in proposals %}
+                  <div class="card soft" style="margin-bottom:10px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                      <div style="font-weight:900;font-size:18px;">NT$ {{ p.price }}</div>
+                      <div class="small">{{ p.created_at }}</div>
+                    </div>
+                    <div style="height:8px"></div>
+                    <div class="grid">
+                      <div class="col-6">
+                        <div class="small">可到場</div>
+                        <div style="font-weight:800;">{{ p.available_time or "未填" }}</div>
+                      </div>
+                      <div class="col-6">
+                        <div class="small">保固</div>
+                        <div style="font-weight:800;">{{ p.warranty or "未填" }}</div>
+                      </div>
+                      <div class="col-12">
+                        <div class="small">備註</div>
+                        <div class="p">{{ p.note or "未填" }}</div>
+                      </div>
+                    </div>
                   </div>
-                  <div style="height:8px"></div>
-                  <div class="grid">
-                    <div class="col-6">
-                      <div class="small">可到場</div>
-                      <div style="font-weight:800;">{{ p.available_time or "未填" }}</div>
-                    </div>
-                    <div class="col-6">
-                      <div class="small">保固</div>
-                      <div style="font-weight:800;">{{ p.warranty or "未填" }}</div>
-                    </div>
-                    <div class="col-12">
-                      <div class="small">備註</div>
-                      <div class="p">{{ p.note or "未填" }}</div>
-                    </div>
-                  </div>
+                {% endfor %}
+              {% else %}
+                <div class="card soft">
+                  <div class="h3">目前尚未收到提案</div>
+                  <p class="p">師傅登入後才能對此案件報價提案。</p>
                 </div>
-              {% endfor %}
+              {% endif %}
             </div>
           {% endif %}
         </div>
 
         <div class="col-5">
           {% if user and user.role == "provider" %}
-            <div class="card">
-              <div class="badge green">師傅提案</div>
-              <div style="height:8px"></div>
-              <div class="h2">我要報價</div>
-              <div class="small">填入價格與可到場時間，案主才看得到</div>
-              <div style="height:10px"></div>
+            {% if job.status != "open" %}
+              <div class="card">
+                <div class="badge amber">案件已關閉</div>
+                <div style="height:8px"></div>
+                <div class="h2">這筆案件已成交</div>
+                <p class="p">目前不開放再提案。</p>
+                <div style="height:10px"></div>
+                <a class="btn" href="/jobs">回案件列表</a>
+              </div>
+            {% else %}
+              <div class="card">
+                <div class="badge green">師傅提案</div>
+                <div style="height:8px"></div>
+                <div class="h2">我要報價</div>
+                <div class="small">填入價格與可到場時間，案主才看得到</div>
+                <div style="height:10px"></div>
 
-              <form class="form" method="post" action="/jobs/{{ job.id }}/propose">
-                <div class="field">
-                  <div class="label">報價（整單）</div>
-                  <input class="input" name="price" type="number" min="0" required placeholder="例：2500" />
-                </div>
+                <form class="form" method="post" action="/jobs/{{ job.id }}/propose">
+                  <div class="field">
+                    <div class="label">報價（整單）</div>
+                    <input class="input" name="price" type="number" min="0" required placeholder="例：2500" />
+                  </div>
 
-                <div class="field">
-                  <div class="label">可到場時間（選填）</div>
-                  <input class="input" name="available_time" placeholder="例：今天 18:00 後 / 週六下午" />
-                </div>
+                  <div class="field">
+                    <div class="label">可到場時間（選填）</div>
+                    <input class="input" name="available_time" placeholder="例：今天 18:00 後 / 週六下午" />
+                  </div>
 
-                <div class="field">
-                  <div class="label">保固（選填）</div>
-                  <input class="input" name="warranty" placeholder="例：完工保固 30 天" />
-                </div>
+                  <div class="field">
+                    <div class="label">保固（選填）</div>
+                    <input class="input" name="warranty" placeholder="例：完工保固 30 天" />
+                  </div>
 
-                <div class="field">
-                  <div class="label">備註（選填）</div>
-                  <textarea class="textarea" name="note" placeholder="例：含基本清潔、到場後若需補冷媒另報"></textarea>
-                </div>
+                  <div class="field">
+                    <div class="label">備註（選填）</div>
+                    <textarea class="textarea" name="note" placeholder="例：含基本清潔、到場後若需補冷媒另報"></textarea>
+                  </div>
 
-                <div class="actions">
-                  <button class="btn green" type="submit">送出提案</button>
-                  <a class="btn" href="/dashboard">回面板</a>
-                </div>
-              </form>
-            </div>
+                  <div class="actions">
+                    <button class="btn green" type="submit">送出提案</button>
+                    <a class="btn" href="/dashboard">回面板</a>
+                  </div>
+                </form>
+              </div>
+            {% endif %}
           {% else %}
             <div class="card">
               <div class="h2">想接案？</div>
