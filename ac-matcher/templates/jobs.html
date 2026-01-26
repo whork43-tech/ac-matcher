@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>公開案件列表</h2>
+{% for j in jobs %}
+<div class="item">
+    <div>
+        <b>#{{j.id}} {{j.service_type}}</b>
+        <span class="muted">｜{{j.city}} {{j.district}}｜{{j.units}}台｜{{ "急件" if j.urgent else "一般" }}</span>
+    </div>
+    <div class="muted">建立：{{j.created_at}}</div>
+    <a class="btn small" href="/jobs/{{j.id}}">查看</a>
+</div>
+{% else %}
+<p class="muted">目前沒有案件</p>
+{% endfor %}
+{% endblock %}

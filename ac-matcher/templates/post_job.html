@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>我要發案</h2>
+<form method="post">
+    <label>服務類型</label>
+    <select name="service_type" required>
+        <option>清洗</option>
+        <option>維修</option>
+        <option>安裝</option>
+        <option>移機</option>
+    </select>
+
+    <label>城市</label>
+    <input name="city" required placeholder="例：高雄市" />
+
+    <label>區域（選填）</label>
+    <input name="district" placeholder="例：三民區" />
+
+    <label>地址備註（不要填完整地址，先大概）</label>
+    <input name="address_note" placeholder="例：近捷運站/社區名" />
+
+    <label>冷氣類型（選填）</label>
+    <input name="ac_type" placeholder="分離式/窗型/吊隱式" />
+
+    <label>台數</label>
+    <input name="units" type="number" value="1" min="1" />
+
+    <label>樓層/是否有電梯（選填）</label>
+    <input name="floor" placeholder="例：3樓有電梯" />
+
+    <label>是否急件</label>
+    <select name="urgent">
+        <option value="0">否</option>
+        <option value="1">是（急件）</option>
+    </select>
+
+    <label>可約時間（選填）</label>
+    <input name="time_window" placeholder="例：今晚/週末/平日晚上" />
+
+    <label>描述（選填）</label>
+    <textarea name="description" rows="4" placeholder="例：冷氣不冷、滴水、想先檢修"></textarea>
+
+    <button class="btn" type="submit">送出案件</button>
+</form>
+{% endblock %}
