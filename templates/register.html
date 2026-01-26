@@ -50,8 +50,9 @@
             <a class="btn" href="/">回首頁</a>
           </div>
         </div>
-        {% if "email_exists" in (request.url.query or "") %}
-          <div class="alert">這個 Email 已被註冊。</div>
+
+        {% if error %}
+          <div class="alert">{{ error }}</div>
         {% endif %}
       </form>
     </div>

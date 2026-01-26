@@ -22,8 +22,9 @@
           <button class="btn primary" type="submit">登入</button>
           <a class="btn" href="/">回首頁</a>
         </div>
-        {% if "bad_login" in (request.url.query or "") %}
-          <div class="alert">帳號或密碼錯誤</div>
+
+        {% if error %}
+          <div class="alert">{{ error }}</div>
         {% endif %}
       </form>
     </div>
