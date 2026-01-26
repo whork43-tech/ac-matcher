@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>註冊</h2>
+<form method="post">
+    <label>身分</label>
+    <select name="role" required>
+        <option value="owner">案主（我要找師傅）</option>
+        <option value="provider">師傅（我要接案）</option>
+    </select>
+
+    <label>姓名/店名</label>
+    <input name="name" required />
+
+    <label>電話</label>
+    <input name="phone" required />
+
+    <label>城市（選填）</label>
+    <input name="city" />
+
+    <label>Email</label>
+    <input name="email" type="email" required />
+
+    <label>密碼</label>
+    <input name="password" type="password" required />
+
+    <button class="btn" type="submit">註冊並登入</button>
+</form>
+{% if "email_exists" in (request.url.query or "") %}
+<p class="error">這個 Email 已被註冊。</p>
+{% endif %}
+{% endblock %}
