@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>案例照片管理</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f6f7fb;margin:0}
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:16px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    label{font-size:13px;color:#374151}
+    input,select{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;font-size:14px}
+    .col{flex:1;min-width:240px}
+    .btn{display:inline-block;background:#111827;color:#fff;padding:10px 12px;border-radius:12px;text-decoration:none;border:0;cursor:pointer}
+    .muted{color:#6b7280}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#eef0f7}
+    @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+    .chip{display:inline-flex;align-items:center;border:1px solid #e7e9f2;border-radius:999px;padding:6px 10px;font-size:13px;background:#fff}
+    .danger{background:#fff1f1;border-color:#f3d7d7;color:#8a1f1f}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:14px">
+      <a class="btn" href="/dashboard">回我的面板</a>
+      <a class="btn" href="/me/provider">編輯我的檔案</a>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:18px;font-weight:800">案例照片管理</div>
+          <div class="muted" style="margin-top:4px">目前 {{ count }} / {{ max_count }} 張</div>
+        </div>
+        <a class="btn" href="/providers/{{ user.id }}">預覽公開頁</a>
+      </div>
+
+      {% if request.query_params.get('err') == 'max6' %}
+        <div class="muted" style="margin-top:10px">已達上限 6 張，先刪掉再新增。</div>
+      {% elif request.query_params.get('err') == 'bad_url' %}
+        <div class="muted" style="margin-top:10px">圖片 URL 必須以 http:// 或 https:// 開頭。</div>
+      {% endif %}
+
+      <div class="card" style="margin-top:14px;background:#fbfbfe;border:1px dashed #e5e7eb">
+        <div style="font-weight:800">新增一張案例照片</div>
+        <form method="post" action="/me/portfolio/add" style="margin-top:10px">
+          <div class="row">
+            <div class="col">
+              <label>圖片 URL</label>
+              <input name="image_url" placeholder="https://...">
+            </div>
+            <div class="col">
+              <label>類型</label>
+              <select name="service_type">
+                <option value="">（不填）</option>
+                <option value="清洗">清洗</option>
+                <option value="維修">維修</option>
+                <option value="安裝">安裝</option>
+                <option value="移機">移機</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <label>簡短說明</label>
+            <input name="caption" placeholder="例如：分離式 2 台，深層清洗，2 小時完工">
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn" type="submit">新增</button>
+          </div>
+        </form>
+      </div>
+
+      <div style="margin-top:14px">
+        {% if items and items|length > 0 %}
+          <div class="grid">
+            {% for it in items %}
+              <div class="card" style="padding:12px">
+                <img class="img" src="{{ it.image_url | e }}" alt="案例照片">
+                <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span class="chip">{{ (it.service_type or "案例") | e }}</span>
+                  <form method="post" action="/me/portfolio/{{ it.id }}/delete" onsubmit="return confirm('確定要刪除這張案例照片？');">
+                    <button class="btn danger" type="submit">刪除</button>
+                  </form>
+                </div>
+                {% if it.caption %}
+                  <div class="muted" style="margin-top:6px">{{ it.caption | e }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="muted">你還沒有新增案例照片。</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
