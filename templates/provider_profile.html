@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>師傅檔案</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#f6f7fb;margin:0}
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:16px}
+    .row{display:flex;gap:16px;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #e7e9f2;border-radius:999px;padding:6px 10px;font-size:13px;background:#fff}
+    .pill.ok{border-color:#d7f3e1;background:#f1fff6}
+    .pill.bad{border-color:#f3d7d7;background:#fff1f1;color:#8a1f1f}
+    .muted{color:#6b7280}
+    .h1{font-size:22px;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#eef0f7}
+    @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+    a.btn{display:inline-block;background:#111827;color:#fff;padding:10px 12px;border-radius:12px;text-decoration:none}
+    .topnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topnav">
+      <a class="btn" href="/jobs">回案件列表</a>
+      {% if user %}
+        <a class="btn" href="/dashboard">回我的面板</a>
+      {% else %}
+        <a class="btn" href="/login">登入</a>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div>
+          <h1 class="h1">
+            {{ (profile.shop_name or profile.display_name or provider.name) | e }}
+          </h1>
+          <div class="muted" style="margin-top:6px">
+            城市：{{ (profile.city or provider.city or "未填") | e }}
+          </div>
+          {% if profile.specialties %}
+            <div style="margin-top:10px">
+              <span class="muted">專長：</span>
+              {% for sp in profile.specialties.split(',') %}
+                <span class="pill">{{ sp | e }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div style="text-align:right">
+          <div class="muted" style="font-size:13px">聯絡方式</div>
+          <div style="margin-top:6px;font-weight:700">成交後才顯示</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="muted" style="margin-bottom:8px">驗證徽章</div>
+        {% for b in badges %}
+          {% if b.ok %}
+            <span class="pill ok">✅ {{ b.label }}{% if b.date %}<span class="muted">({{ b.date }})</span>{% endif %}</span>
+          {% else %}
+            <span class="pill bad">— {{ b.label }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if profile.bio %}
+        <div style="margin-top:14px">
+          <div class="muted" style="margin-bottom:6px">簡介</div>
+          <div style="white-space:pre-wrap;line-height:1.55">{{ profile.bio | e }}</div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div>
+          <div class="h1" style="font-size:18px">案例照片</div>
+          <div class="muted" style="margin-top:4px">最多顯示 6 張（MVP）</div>
+        </div>
+      </div>
+
+      {% if portfolio and portfolio|length > 0 %}
+        <div class="grid" style="margin-top:12px">
+          {% for it in portfolio %}
+            <div>
+              <img class="img" src="{{ it.image_url | e }}" alt="案例照片">
+              <div style="margin-top:8px;font-weight:700">{{ (it.service_type or "案例") | e }}</div>
+              {% if it.caption %}
+                <div class="muted" style="margin-top:2px">{{ it.caption | e }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="muted" style="margin-top:10px">師傅尚未新增案例照片。</div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

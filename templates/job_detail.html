@@ -79,6 +79,32 @@
                       <div style="font-weight:900;font-size:18px;">NT$ {{ p.price }}</div>
                       <div class="small">{{ p.created_at }}</div>
                     </div>
+                    <div style="height:10px"></div>
+
+                    {# === 師傅資訊 + 徽章 + 查看師傅檔案（C 方案 MVP）=== #}
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                      <div>
+                        <div class="small">師傅</div>
+                        <div style="font-weight:900;">{{ (p.provider.name if p.provider else ("師傅 #" ~ p.provider_id)) | e }}</div>
+
+                        <div style="height:6px"></div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                          {% set badges = provider_badges.get(p.provider_id, []) %}
+                          {% for b in badges %}
+                            {% if b.ok %}
+                              <span class="badge green">✅ {{ b.label }}</span>
+                            {% endif %}
+                          {% endfor %}
+                          {% if badges|selectattr('ok')|list|length == 0 %}
+                            <span class="badge amber">尚未驗證</span>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      <a class="btn small" href="/providers/{{ p.provider_id }}">查看師傅檔案</a>
+                    </div>
+
+                    <div style="height:12px"></div>
                     <div style="height:8px"></div>
                     <div class="grid">
                       <div class="col-6">
