@@ -1,168 +1,414 @@
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>淨利通｜工班/小店 日結月結・未收款・成本・報表</title>
   <meta name="description" content="淨利通：每天30秒知道今日實收、今日淨利、本月淨利；未收款管理、成本支出、報表匯出。提供導入建置＋月費訂閱，7–14天上線。" />
   <style>
-    :root{
-      --bg:#f6f8fc;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --line:#e2e8f0;
-      --brand:#0ea5e9;   /* sky */
-      --brand2:#22c55e;  /* green */
-      --warn:#f59e0b;
-      --shadow: 0 10px 24px rgba(2,6,23,.08);
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+      --brand: #0ea5e9;
+      /* sky */
+      --brand2: #22c55e;
+      /* green */
+      --warn: #f59e0b;
+      --shadow: 0 10px 24px rgba(2, 6, 23, .08);
       --radius: 18px;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "PingFang TC", Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1100px 420px at 15% -10%, rgba(14,165,233,.12), transparent 60%),
-        radial-gradient(1100px 420px at 90% 5%, rgba(34,197,94,.10), transparent 55%),
-        linear-gradient(180deg, #ffffff, var(--bg));
-      line-height:1.6;
+
+    * {
+      box-sizing: border-box
     }
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1100px;margin:0 auto;padding:22px}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:10px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.3px}
-    .logo{
-      width:38px;height:38px;border-radius:12px;
-      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(34,197,94,.90));
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "PingFang TC", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 420px at 15% -10%, rgba(14, 165, 233, .12), transparent 60%),
+        radial-gradient(1100px 420px at 90% 5%, rgba(34, 197, 94, .10), transparent 55%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .3px
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, .95), rgba(34, 197, 94, .90));
       box-shadow: var(--shadow);
     }
-    .navlinks{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .nav a.small{
-      color:var(--muted);
-      padding:8px 10px;border:1px solid transparent;border-radius:999px;
-      background: rgba(255,255,255,.6);
+
+    .navlinks {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end
     }
-    .nav a.small:hover{border-color:rgba(2,6,23,.10);color:var(--text)}
-    .hero{display:grid;grid-template-columns:1.18fr .82fr;gap:16px;padding:18px 0 6px}
-    @media (max-width:900px){.hero{grid-template-columns:1fr}}
-    .card{
-      background: rgba(255,255,255,.9);
-      border:1px solid var(--line);
+
+    .nav a.small {
+      color: var(--muted);
+      padding: 8px 10px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .6);
+    }
+
+    .nav a.small:hover {
+      border-color: rgba(2, 6, 23, .10);
+      color: var(--text)
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.18fr .82fr;
+      gap: 16px;
+      padding: 18px 0 6px
+    }
+
+    @media (max-width:900px) {
+      .hero {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, .9);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding:22px;
+      padding: 22px;
       backdrop-filter: blur(8px);
     }
-    .kicker{
-      display:inline-flex;align-items:center;gap:8px;
-      background: rgba(14,165,233,.10);
-      color:#0369a1;
-      border: 1px solid rgba(14,165,233,.20);
-      padding:6px 10px;border-radius:999px;
-      font-size:13px;font-weight:900;
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(14, 165, 233, .10);
+      color: #0369a1;
+      border: 1px solid rgba(14, 165, 233, .20);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
     }
-    h1{margin:14px 0 10px;font-size:42px;line-height:1.15}
-    @media (max-width:520px){h1{font-size:34px}}
-    .sub{color:var(--muted);font-size:16px;margin:0 0 16px}
-    .bullets{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 4px}
-    @media (max-width:700px){.bullets{grid-template-columns:1fr}}
-    .b{
-      display:flex;gap:10px;align-items:flex-start;
-      padding:12px 12px;border:1px solid var(--line);border-radius:14px;
-      background: rgba(248,250,252,.8);
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: 42px;
+      line-height: 1.15
     }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      margin-top:7px;background: linear-gradient(135deg, var(--brand), var(--brand2));
-      flex:0 0 auto;
+
+    @media (max-width:520px) {
+      h1 {
+        font-size: 34px
+      }
     }
-    .b strong{display:block}
-    .b span{color:var(--muted);font-size:13px}
-    .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:11px 14px;border-radius:14px;font-weight:900;
-      border:1px solid rgba(2,6,23,.10);
-      background: rgba(255,255,255,.75);
-      color:var(--text);
+
+    .sub {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0 0 16px
     }
-    .btn.primary{
-      border-color: rgba(14,165,233,.25);
-      background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(34,197,94,.10));
+
+    .bullets {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0 4px
     }
-    .btn:hover{transform:translateY(-1px)}
-    .mini{color:var(--muted);font-size:13px;margin-top:10px}
-    .badge{
-      display:inline-flex;gap:8px;align-items:center;
-      padding:8px 10px;border-radius:999px;font-size:13px;
-      background: rgba(245,158,11,.12);
-      border: 1px solid rgba(245,158,11,.20);
-      color:#92400e;font-weight:900;margin-bottom:10px;
+
+    @media (max-width:700px) {
+      .bullets {
+        grid-template-columns: 1fr
+      }
     }
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media (max-width:520px){.grid2{grid-template-columns:1fr}}
-    .tile{
-      padding:14px;border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(248,250,252,.8);
+
+    .b {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(248, 250, 252, .8);
     }
-    .tile .t{font-weight:950}
-    .tile .d{color:var(--muted);font-size:13px;margin-top:4px}
-    section{padding:18px 0}
-    .section-title{font-size:22px;margin:0 0 10px}
-    .muted{color:var(--muted)}
-    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width:900px){.pricing{grid-template-columns:1fr}}
-    .p-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
-    .p-head h3{margin:0;font-size:18px}
-    .tag{
-      font-size:12px;font-weight:950;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(34,197,94,.25);
-      background: rgba(34,197,94,.10);
-      color:#166534;
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 7px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      flex: 0 0 auto;
     }
-    .plan{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
-    @media (max-width:700px){.plan{grid-template-columns:1fr}}
-    .box{
-      border:1px solid var(--line);
-      background: rgba(248,250,252,.8);
-      border-radius:16px;
-      padding:14px;
+
+    .b strong {
+      display: block
     }
-    .box.highlight{border-color:rgba(14,165,233,.25)}
-    .price{font-weight:950;font-size:20px;margin-top:6px}
-    ul{margin:10px 0 0 18px;color:var(--muted);font-size:13px}
-    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    @media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
-    @media (max-width:520px){.steps{grid-template-columns:1fr}}
-    .step{
-      padding:14px;border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(248,250,252,.8);
+
+    .b span {
+      color: var(--muted);
+      font-size: 13px
     }
-    .n{
-      width:30px;height:30px;border-radius:10px;
-      background: linear-gradient(135deg, rgba(14,165,233,.14), rgba(34,197,94,.12));
-      display:flex;align-items:center;justify-content:center;
-      font-weight:950;margin-bottom:10px;border:1px solid rgba(2,6,23,.08);
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px
     }
-    .foot{
-      margin-top:10px;
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
-      border-top:1px solid var(--line);
-      padding-top:16px;color:var(--muted);font-size:13px
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      border: 1px solid rgba(2, 6, 23, .10);
+      background: rgba(255, 255, 255, .75);
+      color: var(--text);
     }
-    code.inline{
-      background: rgba(248,250,252,.9);
-      border:1px solid var(--line);
-      padding:2px 6px;border-radius:8px;color:var(--text);
-      font-size:12px
+
+    .btn.primary {
+      border-color: rgba(14, 165, 233, .25);
+      background: linear-gradient(135deg, rgba(14, 165, 233, .12), rgba(34, 197, 94, .10));
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .mini {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      background: rgba(245, 158, 11, .12);
+      border: 1px solid rgba(245, 158, 11, .20);
+      color: #92400e;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    @media (max-width:520px) {
+      .grid2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .tile {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, .8);
+    }
+
+    .tile .t {
+      font-weight: 950
+    }
+
+    .tile .d {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px
+    }
+
+    section {
+      padding: 18px 0
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin: 0 0 10px
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    @media (max-width:900px) {
+      .pricing {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .p-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .p-head h3 {
+      margin: 0;
+      font-size: 18px
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 950;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, .25);
+      background: rgba(34, 197, 94, .10);
+      color: #166534;
+    }
+
+    .plan {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px
+    }
+
+    @media (max-width:700px) {
+      .plan {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, .8);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .box.highlight {
+      border-color: rgba(14, 165, 233, .25)
+    }
+
+    .price {
+      font-weight: 950;
+      font-size: 20px;
+      margin-top: 6px
+    }
+
+    ul {
+      margin: 10px 0 0 18px;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px
+    }
+
+    @media (max-width:900px) {
+      .steps {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media (max-width:520px) {
+      .steps {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .step {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, .8);
+    }
+
+    .n {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, .14), rgba(34, 197, 94, .12));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      margin-bottom: 10px;
+      border: 1px solid rgba(2, 6, 23, .08);
+    }
+
+    .foot {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    code.inline {
+      background: rgba(248, 250, 252, .9);
+      border: 1px solid var(--line);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="nav">
@@ -180,17 +426,29 @@
     <div class="hero">
       <div class="card">
         <div class="kicker">每天 30 秒知道：今天收多少、賺多少、誰還沒付</div>
-        <h1>工班/小店專用<br/>日結月結・未收款・成本・報表</h1>
+        <h1>工班/小店專用<br />日結月結・未收款・成本・報表</h1>
         <p class="sub">
           <b>淨利通</b> 讓你不用再靠 Excel 亂整理。把「收款、支出成本、未收款、日結月結、匯出報表」變成一個每天都會打開的工具。
           提供 <b>導入建置</b>（我們幫你設定到能用）+ <b>月費訂閱</b>（持續維護更新）。
         </p>
 
         <div class="bullets">
-          <div class="b"><div class="dot"></div><div><strong>今日看板</strong><span>今日實收 / 今日淨利 / 本月淨利</span></div></div>
-          <div class="b"><div class="dot"></div><div><strong>未收款管理</strong><span>誰還沒付、到期狀態、追款清單</span></div></div>
-          <div class="b"><div class="dot"></div><div><strong>成本支出</strong><span>材料/外包/油資/雜支，一次記清楚</span></div></div>
-          <div class="b"><div class="dot"></div><div><strong>一鍵匯出</strong><span>月底匯出報表，交會計/對帳</span></div></div>
+          <div class="b">
+            <div class="dot"></div>
+            <div><strong>今日看板</strong><span>今日實收 / 今日淨利 / 本月淨利</span></div>
+          </div>
+          <div class="b">
+            <div class="dot"></div>
+            <div><strong>未收款管理</strong><span>誰還沒付、到期狀態、追款清單</span></div>
+          </div>
+          <div class="b">
+            <div class="dot"></div>
+            <div><strong>成本支出</strong><span>材料/外包/油資/雜支，一次記清楚</span></div>
+          </div>
+          <div class="b">
+            <div class="dot"></div>
+            <div><strong>一鍵匯出</strong><span>月底匯出報表，交會計/對帳</span></div>
+          </div>
         </div>
 
         <div class="cta">
@@ -246,7 +504,7 @@
           <div class="plan">
             <div class="box">
               <div style="font-weight:950">S 入門</div>
-              <div class="price">導入 30,000<br/>月費 999</div>
+              <div class="price">導入 30,000<br />月費 999</div>
               <ul>
                 <li>分類/規則基本設定</li>
                 <li>1 老闆 + 2 員工</li>
@@ -256,7 +514,7 @@
             </div>
             <div class="box highlight">
               <div style="font-weight:950">M 主推 ✅</div>
-              <div class="price">導入 50,000<br/>月費 1,499</div>
+              <div class="price">導入 50,000<br />月費 1,499</div>
               <ul>
                 <li>未收款管理規則</li>
                 <li>1 老闆 + 5 員工</li>
@@ -267,7 +525,7 @@
             </div>
             <div class="box">
               <div style="font-weight:950">L 團隊</div>
-              <div class="price">導入 80,000 起<br/>月費 2,999 起</div>
+              <div class="price">導入 80,000 起<br />月費 2,999 起</div>
               <ul>
                 <li>多組別/更細權限</li>
                 <li>報表微客製 1–2 項</li>
@@ -288,7 +546,7 @@
           <div class="plan">
             <div class="box">
               <div style="font-weight:950">S 入門</div>
-              <div class="price">導入 20,000<br/>月費 799</div>
+              <div class="price">導入 20,000<br />月費 799</div>
               <ul>
                 <li>分類/規則基本設定</li>
                 <li>1 老闆 + 1 員工</li>
@@ -298,7 +556,7 @@
             </div>
             <div class="box highlight">
               <div style="font-weight:950">M 主推 ✅</div>
-              <div class="price">導入 40,000<br/>月費 1,299</div>
+              <div class="price">導入 40,000<br />月費 1,299</div>
               <ul>
                 <li>欠款/應收清單</li>
                 <li>日結/月結看板</li>
@@ -309,7 +567,7 @@
             </div>
             <div class="box">
               <div style="font-weight:950">L 多店</div>
-              <div class="price">導入 70,000 起<br/>月費 2,499 起</div>
+              <div class="price">導入 70,000 起<br />月費 2,499 起</div>
               <ul>
                 <li>多分店/多角色</li>
                 <li>報表微客製 1–2 項</li>
@@ -352,7 +610,7 @@
       <div class="card" style="margin-top:12px">
         <div style="font-weight:950">收款方式（保護雙方）</div>
         <p class="muted" style="margin:8px 0 0">
-          <b>訂金 50%</b> 開工 → 建置完成安排教學 → 上線/教學日收 <b>尾款 50%</b>。<br/>
+          <b>訂金 50%</b> 開工 → 建置完成安排教學 → 上線/教學日收 <b>尾款 50%</b>。<br />
           訂閱費可月繳或年繳（年繳更優惠）。
         </p>
       </div>
@@ -367,8 +625,7 @@
         </p>
         <div class="cta" style="margin-top:12px">
           <!-- 改成你的 LINE 與 Email -->
-          <a class="btn primary" href="https://line.me/R/ti/p/%40yourlineid" target="_blank" rel="noopener">加 LINE 諮詢</a>
-          <a class="btn" href="mailto:you@example.com">Email</a>
+          <a class="btn primary" href="https://line.me/R/ti/p/@826ynmlh" target="_blank" rel="noopener">加 LINE 諮詢</a>
         </div>
         <div class="mini">小提醒：先換成你的 LINE 與 Email；之後要加表單也很容易。</div>
       </div>
@@ -383,4 +640,5 @@
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
+
 </html>
